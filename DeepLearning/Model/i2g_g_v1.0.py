@@ -63,7 +63,7 @@ np.random.seed(seed)
 # init
 batch_size = 32
 num_classes = 4
-epochs = 30
+epochs = 20
 
 # data load and preprocess
 print(sys.argv[1])
@@ -78,36 +78,6 @@ y = np.transpose(y, (1, 0))
 print('x shape: ', x.shape)
 print('y shape: ', y.shape)
 
-# model
-model = Sequential()
-
-model.add(Conv2D(32, (3, 3), input_shape=x.shape[1:]))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Dropout(0.25))
-
-model.add(Conv2D(32, (3, 3)))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
-
-model.add(Flatten())
-
-model.add(Dense(128))
-model.add(Activation('relu'))
-model.add(Dropout(0.25))
-
-model.add(Dense(32))
-model.add(Activation('relu'))
-model.add(Dropout(0.25))
-
-model.add(Dense(num_classes))
-
-model.summary()
-
-# train
-opt = keras.optimizers.rmsprop(lr=0.001, decay=1e-6)
-model.compile(loss='mse', optimizer=opt, metrics=['accuracy'])
 
 x = x.astype('float32')
 x /= 255
@@ -118,6 +88,37 @@ kf = KFold(n_splits=5)
 cvscores = []
 model_index = 1
 for train, test in kf.split(x, y):
+    # model
+    model = Sequential()
+
+    model.add(Conv2D(32, (3, 3), input_shape=x.shape[1:]))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2)))
+    model.add(Dropout(0.25))
+
+    model.add(Conv2D(32, (3, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+
+    model.add(Flatten())
+
+    model.add(Dense(128))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.25))
+
+    model.add(Dense(32))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.25))
+
+    model.add(Dense(num_classes))
+
+    model.summary()
+
+    # train
+    opt = keras.optimizers.rmsprop(lr=0.001, decay=1e-6)
+    model.compile(loss='mse', optimizer=opt, metrics=['accuracy'])
+
     model.fit(x[train], y[train],
           batch_size=batch_size,
           epochs=epochs,
