@@ -7,6 +7,9 @@
     Function:
     v1.0: 
     read the modify time of pictures and save them in a textfile
+    
+    Instruction:
+    Put this py script into the pictures' folder and the result text file will generate in it.
 '''
 import os
 import time
